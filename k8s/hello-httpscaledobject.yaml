@@ -1,0 +1,15 @@
+apiVersion: http.keda.sh/v1alpha1
+kind: HTTPScaledObject
+metadata:
+  name: hello-http
+  namespace: hello
+spec:
+  host: "REPLACE_WITH_PUBLIC_HOST"   # vamos colocar o host real mais adiante
+  targetPendingRequests: "1"
+  replicas:
+    min: 0
+    max: 20
+  scaleTargetRef:
+    deployment: hello
+    service: hello
+    port: 8080
