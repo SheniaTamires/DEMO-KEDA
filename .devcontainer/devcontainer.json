@@ -1,0 +1,6 @@
+{
+  "name": "keda-http-hello",
+  "build": { "dockerfile": "Dockerfile" },
+  "postCreateCommand": "bash scripts/kind-create.sh",
+  "customizations": { "vscode": { "extensions": ["ms-kubernetes-tools.vscode-kubernetes-tools"] } }
+}
