@@ -1,3 +1,4 @@
+cat > k8s/hello-deploy.yaml <<'YAML'
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9,11 +10,25 @@ spec:
   template:
     metadata: { labels: { app: hello } }
     spec:
+      volumes:
+        - name: code
+          configMap:
+            name: hello-code
       containers:
         - name: app
-          image: hello:local
+          image: python:3.12-slim
+          command: ["/bin/sh","-c"]
+          args:
+            - |
+              pip install --no-cache-dir fastapi==0.115.5 uvicorn==0.30.6 && \
+              uvicorn main:app --host 0.0.0.0 --port 8080
+          volumeMounts:
+            - name: code
+              mountPath: /app
+          workingDir: /app
           ports:
             - containerPort: 8080
           resources:
             requests: { cpu: "50m", memory: "64Mi" }
             limits:   { cpu: "200m", memory: "128Mi" }
+YAML
